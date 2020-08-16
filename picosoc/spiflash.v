@@ -36,7 +36,7 @@
 //    https://www.winbond.com/resource-files/w25q128jv%20dtr%20revb%2011042016.pdf
 //
 
-module spiflash (
+module spiflash(
 	input csb,
 	input clk,
 	inout io0, // MOSI
@@ -44,8 +44,10 @@ module spiflash (
 	inout io2,
 	inout io3
 );
+
 	localparam verbose = 0;
 	localparam integer latency = 8;
+
 
 	reg [7:0] buffer;
 	integer bitcount = 0;

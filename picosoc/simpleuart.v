@@ -17,23 +17,27 @@
  *
  */
 
-module simpleuart #(parameter integer DEFAULT_DIV = 1) (
+module simpleuart #(
+	parameter integer DEFAULT_DIV = 1
+) (
 	input clk,
 	input resetn,
 
 	output ser_tx,
-	input  ser_rx,
+	input ser_rx,
 
-	input   [3:0] reg_div_we,
-	input  [31:0] reg_div_di,
+	input [3:0] reg_div_we,
+	input [31:0] reg_div_di,
 	output [31:0] reg_div_do,
 
-	input         reg_dat_we,
-	input         reg_dat_re,
-	input  [31:0] reg_dat_di,
+	input reg_dat_we,
+	input reg_dat_re,
+	input [31:0] reg_dat_di,
 	output [31:0] reg_dat_do,
-	output        reg_dat_wait
+	output reg_dat_wait
 );
+
+
 	reg [31:0] cfg_divider;
 
 	reg [3:0] recv_state;
@@ -47,10 +51,12 @@ module simpleuart #(parameter integer DEFAULT_DIV = 1) (
 	reg [31:0] send_divcnt;
 	reg send_dummy;
 
+
 	assign reg_div_do = cfg_divider;
 
 	assign reg_dat_wait = reg_dat_we && (send_bitcnt || send_dummy);
 	assign reg_dat_do = recv_buf_valid ? recv_buf_data : ~0;
+
 
 	always @(posedge clk) begin
 		if (!resetn) begin
@@ -62,6 +68,7 @@ module simpleuart #(parameter integer DEFAULT_DIV = 1) (
 			if (reg_div_we[3]) cfg_divider[31:24] <= reg_div_di[31:24];
 		end
 	end
+
 
 	always @(posedge clk) begin
 		if (!resetn) begin
@@ -104,7 +111,9 @@ module simpleuart #(parameter integer DEFAULT_DIV = 1) (
 		end
 	end
 
+
 	assign ser_tx = send_pattern[0];
+
 
 	always @(posedge clk) begin
 		if (reg_div_we)
@@ -134,4 +143,6 @@ module simpleuart #(parameter integer DEFAULT_DIV = 1) (
 			end
 		end
 	end
+
+
 endmodule

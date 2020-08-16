@@ -22,36 +22,14 @@
 /* verilator lint_off CASEOVERLAP */
 /* verilator lint_off CASEINCOMPLETE */
 
+
 `timescale 1 ns / 1 ps
+
 // `default_nettype none
-// `define DEBUGNETS
-// `define DEBUGREGS
-// `define DEBUGASM
-// `define DEBUG
 
-`ifdef DEBUG
-  `define debug(debug_command) debug_command
-`else
-  `define debug(debug_command)
-`endif
+`include "picorv32_config.vh"
 
-`ifdef FORMAL
-  `define FORMAL_KEEP (* keep *)
-  `define assert(assert_expr) assert(assert_expr)
-`else
-  `ifdef DEBUGNETS
-    `define FORMAL_KEEP (* keep *)
-  `else
-    `define FORMAL_KEEP
-  `endif
-  `define assert(assert_expr) empty_statement
-`endif
-
-// uncomment this for register file in extra module
-// `define PICORV32_REGS picorv32_regs
-
-// this macro can be used to check if the verilog files in your
-// design are read in the correct order.
+// this macro can be used to check if the verilog files in your design are read in the correct order.
 `define PICORV32_V
 
 
@@ -87,7 +65,8 @@ module picorv32 #(
 	parameter [31:0] PROGADDR_IRQ = 32'h 0000_0010,
 	parameter [31:0] STACKADDR = 32'h ffff_ffff
 ) (
-	input clk, resetn,
+	input clk,
+	input resetn,
 	output reg trap,
 
 	output reg        mem_valid,
@@ -158,6 +137,8 @@ module picorv32 #(
 	output reg        trace_valid,
 	output reg [35:0] trace_data
 );
+
+
 	localparam integer irq_timer = 0;
 	localparam integer irq_ebreak = 1;
 	localparam integer irq_buserror = 2;
@@ -218,16 +199,16 @@ module picorv32 #(
 	endtask
 
 `ifdef DEBUGREGS
-	wire [31:0] dbg_reg_x0  = 0;
-	wire [31:0] dbg_reg_x1  = cpuregs[1];
-	wire [31:0] dbg_reg_x2  = cpuregs[2];
-	wire [31:0] dbg_reg_x3  = cpuregs[3];
-	wire [31:0] dbg_reg_x4  = cpuregs[4];
-	wire [31:0] dbg_reg_x5  = cpuregs[5];
-	wire [31:0] dbg_reg_x6  = cpuregs[6];
-	wire [31:0] dbg_reg_x7  = cpuregs[7];
-	wire [31:0] dbg_reg_x8  = cpuregs[8];
-	wire [31:0] dbg_reg_x9  = cpuregs[9];
+	wire [31:0] dbg_reg_x0 = 0;
+	wire [31:0] dbg_reg_x1 = cpuregs[1];
+	wire [31:0] dbg_reg_x2 = cpuregs[2];
+	wire [31:0] dbg_reg_x3 = cpuregs[3];
+	wire [31:0] dbg_reg_x4 = cpuregs[4];
+	wire [31:0] dbg_reg_x5 = cpuregs[5];
+	wire [31:0] dbg_reg_x6 = cpuregs[6];
+	wire [31:0] dbg_reg_x7 = cpuregs[7];
+	wire [31:0] dbg_reg_x8 = cpuregs[8];
+	wire [31:0] dbg_reg_x9 = cpuregs[9];
 	wire [31:0] dbg_reg_x10 = cpuregs[10];
 	wire [31:0] dbg_reg_x11 = cpuregs[11];
 	wire [31:0] dbg_reg_x12 = cpuregs[12];
